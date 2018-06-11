@@ -7,6 +7,7 @@ var winston = require('winston')
 var moment = require('moment')
 
 var logger = new (winston.Logger)({
+  level: process.env.NODE_LOG_LEVEL || 'info',
   transports: [
     new (winston.transports.Console)({
       timestamp: function() {
@@ -25,6 +26,7 @@ var lightningUrl = 'https://fire.ak.blm.gov/arcgis/rest/services/AICC_Services/M
 var lightningFilePath = process.env.LIGHTNING_TEMPFILE || '/tmp/lightning.geojson'
 var pgString = process.env.LIGHTNING_PG_STRING || 'dbname=gisdata host=34.220.153.233 user=geoserver'
 var execString = 'ogr2ogr -f "PostgreSQL" PG:"' + pgString + '" -overwrite ' + lightningFilePath
+logger.debug('Using ogr2ogr command string: ', execString)
 
 logger.info('Fetching upstream lightning data...')
 request.get(lightningUrl, function(err, res, body) {
